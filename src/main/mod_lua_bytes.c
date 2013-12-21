@@ -21,7 +21,12 @@
  *****************************************************************************/
 
 #include <arpa/inet.h> // byteswap
+
+#ifdef OSX
+#include <aerospike/osx_endian_compat.h>
+#else
 #include <endian.h>
+#endif
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>

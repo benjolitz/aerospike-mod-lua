@@ -356,9 +356,14 @@ static int update(as_module * m, as_module_event * e) {
                 if (0 != pthread_rwlockattr_init(&rwattr)) {
                     return 3;
                 }
-                if (0 != pthread_rwlockattr_setkind_np(&rwattr, PTHREAD_RWLOCK_PREFER_WRITER_NONRECURSIVE_NP)) {
-                    return 3;
-                }
+                /*
+                OSX and Freebsd lack pthread_rwlockattr_setkind_np. Ignore it.
+                */
+                #ifndef OSX
+                    if (0 != pthread_rwlockattr_setkind_np(&rwattr, PTHREAD_RWLOCK_PREFER_WRITER_NONRECURSIVE_NP)) {
+                        return 3;
+                    }
+                #endif
                 if (0 != pthread_rwlock_init(ctx->lock, &rwattr)) {
                     return 3;
                 }
